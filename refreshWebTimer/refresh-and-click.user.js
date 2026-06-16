@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Page Refresh & Auto-Click
 // @namespace    https://github.com/someboy53/monkeyScripts
-// @version      1.0
-// @description  Refresh the page every 5 minutes and auto-click the active nav link.
+// @version      1.1
+// @description  Click target nav links every 5 minutes.
 // @author       someboy53
-// @match        http://studio.kk.seeyon.com/index*
+// @match        *://studio.kk.seeyon.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -13,23 +13,28 @@
 
     const REFRESH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
+    const SELECTORS = {
+        mainNav: '#side-menu > li:nth-child(1) > a:nth-child(1)',
+        subNav:  '#side-menu > li:nth-child(3) > a:nth-child(1)',
+    };
+
     function triggerClick(target) {
         if (!target) return;
         target.click();
     }
 
     function findAndClick() {
-        const target = document.querySelector('li.active > a:nth-child(1)');
-        if (target) {
-            triggerClick(target);
+        for (const sel of Object.values(SELECTORS)) {
+            const target = document.querySelector(sel);
+            if (target) {
+                triggerClick(target);
+            }
         }
     }
 
-    // Attempt to click once on page load, after DOM settles.
+    // Click once on page load, after DOM settles.
     window.addEventListener('DOMContentLoaded', findAndClick);
 
-    // Set up the 5-minute refresh cycle.
-    setInterval(function () {
-        location.reload();
-    }, REFRESH_INTERVAL_MS);
+    // Click every 5 minutes without reloading.
+    setInterval(findAndClick, REFRESH_INTERVAL_MS);
 })();
