@@ -48,11 +48,8 @@
     function openMovieLinksInNewTab() {
         const boxes = document.querySelectorAll('.movie-box');
         boxes.forEach(box => {
-            const link = box.querySelector('a');
-            if (link) {
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer';
-            }
+            box.target = '_blank';
+            box.rel = 'noopener noreferrer';
         });
     }
 
